@@ -1,0 +1,150 @@
+[Week 3–2 | Slide 1]
+Meme comparing two Python file-handling approaches: explicitly opening and closing a file vs. using the with open() context manager for cleaner, safer code.
+
+[Week 3–2 | Slide 3 (1)]
+Formulas for simple linear regression parameters:
+β̂₁ = Σ(xᵢ−x̄)(yᵢ−ȳ) / Σ(xᵢ−x̄)² and β̂₀ = ȳ − β̂₁x̄, describing slope and intercept calculation for best-fit lines.
+
+[Week 3–2 | Slide 3 (2)]
+Equations defining sample means used in regression: ȳ = (1/n)Σyᵢ and x̄ = (1/n)Σxᵢ, representing average target and feature values.
+
+[Week 3–2 | Slide 5]
+Green infographic showing the iterative gradient descent process:
+	1.	Calculate loss
+	2.	Determine direction to update weights and bias
+	3.	Move small steps to reduce loss
+	4.	Repeat until convergence.
+
+[Week 3–2 | Slide 6 (1)]
+Equation for mean squared loss:
+L(w, b) = (1/n) Σ (yᵢ − (w·xᵢ + b))², representing average squared error between predictions and actual values.
+
+[Week 3–2 | Slide 6 (2)]
+Prediction function ŷ = w·x + b, expressing the linear relationship between input x and predicted output ŷ.
+
+[Week 3–2 | Slide 7 (1)]
+Duplicate of ŷ = w·x + b formula, reinforcing the definition of a linear model in regression.
+
+[Week 3–2 | Slide 7 (2)]
+Gradient descent update rules:
+w := w − α(∂L/∂w) and b := b − α(∂L/∂b), where α is the learning rate controlling step size in optimization.
+
+[Week 3–2 | Slide 7 (3)]
+Variant of gradient update equations showing incremental weight update notation:
+wₙₑw = wₒld − α(∂L/∂w).
+
+[Week 3–2 | Slide 8]
+Taylor series approximation of the loss function:
+L(w + Δw) ≈ L(w) + (∂L/∂w)·Δw, demonstrating how small weight changes affect loss value.
+
+[Week 3–2 | Slide 8 (2)]
+Taylor series expansion of a function around point a:
+f(x) = f(a) + f′(a)(x−a)/1! + f″(a)(x−a)²/2! + f‴(a)(x−a)³/3! + … = Σ[f⁽ⁿ⁾(a)(x−a)ⁿ / n!], used for function approximation in calculus and optimization.
+
+[Week 3–2 | Slide 9]
+Cartoon of a person standing on a hill labeled “uphill” and “downhill,” illustrating gradient descent and ascent — optimization moves downhill to minimize loss.
+
+[Week 3–2 | Slide 10]
+Mean squared error (MSE) loss function formula:
+L(w,b) = (1/n) Σ (yᵢ − (w·xᵢ + b))², representing the average squared difference between predicted and true values.
+
+[Week 3–2 | Slide 11 (1)]
+Detailed derivation of the partial derivative of loss with respect to w using the chain rule, showing ∂L/∂w = −(2/n) Σ xᵢ (yᵢ − (w·xᵢ + b)).
+
+[Week 3–2 | Slide 11 (2)]
+3D paraboloid graph of cost function J(w,b) showing its minimum point; illustrates how gradient descent seeks the global minimum of loss.
+
+[Week 3–2 | Slide 11 (3)]
+Derivation of the gradient of the loss function with respect to b:
+∂L/∂b = −(2/n) Σ (yᵢ − (w·xᵢ + b)), used to update the bias term during training.
+
+[Week 3–2 | Slide 12 (1)]
+Gradient descent weight and bias update equations:
+wₙₑw = wₒld − α(∂L/∂w),
+bₙₑw = bₒld − α(∂L/∂b), followed by simplification showing equivalent positive update form.
+
+[Week 3–2 | Slide 12 (2)]
+Simplified version of the weight update rule:
+wₙₑw = wₒld + (2α/n) Σ xᵢ·errorᵢ, linking learning rate, feature values, and model error.
+
+[Week 3–2 | Slide 13 (1)]
+Equations showing gradient-descent parameter updates:
+w_{new} = w_{old} + \frac{2\alpha}{n} \sum x_i (y_i - (w_{old}x_i + b_{old})) and
+b_{new} = b_{old} + \frac{2\alpha}{n} \sum (y_i - (w_{old}x_i + b_{old})),
+illustrating how weights and biases adjust using summed prediction errors.
+
+[Week 3–2 | Slide 13 (2)]
+Simplified form of the same update rules, expressed with explicit “error” notation:
+w_{new} = w_{old} + \frac{2\alpha}{n} \sum x_i \cdot error_i and
+b_{new} = b_{old} + \frac{2\alpha}{n} \sum error_i.
+
+[Week 3–2 | Slide 14]
+Gradient-descent update formula shown as
+w := w - \alpha \frac{\partial L}{\partial w}, \ b := b - \alpha \frac{\partial L}{\partial b},
+highlighting that parameters move opposite the gradient to minimize loss.
+
+[Week 3–2 | Slide 15]
+Illustration comparing big vs. small learning rates: large steps overshoot the minimum, while smaller steps converge smoothly.
+
+[Week 3–2 | Slide 16 (1)]
+Graph comparing Batch, Stochastic, and Mini-Batch Gradient Descent convergence curves. Shows how update frequency affects stability and speed.
+
+[Week 3–2 | Slide 16 (2)]
+Plot of loss vs. epoch for various learning rates — very high (divergent), high, low, and good — emphasizing optimal learning-rate selection.
+
+[Week 3–2 | Slide 17]
+Scatterplot of a generated nonlinear and noisy dataset used for regression illustration.
+Caption: “Figure 4-12. Generated nonlinear and noisy dataset.”
+
+[Week 3–2 | Slide 18]
+Plot showing a red prediction curve fitted to noisy blue-dot data, demonstrating polynomial regression capturing nonlinear trends.
+
+[Week 3–2 | Slide 22 (1)]
+Image grid displaying MNIST handwritten digits (0–9) for visualizing digit-recognition data.
+
+[Week 3–2 | Slide 22 (2)]
+Sample of nine MNIST digits with true vs. predicted labels (e.g., 4 (4), 7 (7)), confirming model classification accuracy.
+
+[Week 3–2 | Slide 23]
+Large composite of handwritten digits 0–9 from the MNIST dataset — shows dataset variety for training neural networks.
+
+[Week 3–2 | Slide 24 (1)]
+Portrait of a leading deep-learning researcher (contextual reference to CNN or MNIST breakthroughs).
+
+[Week 3–2 | Slide 24 (2)]
+Diagram of a deep neural network architecture: input layer, multiple hidden layers, and output layer with connecting nodes.
+
+[Week 3–2 | Slide 26 (1)]
+Illustration showing how a neural network processes a handwritten digit image through successive hidden layers of interconnected neurons.
+
+[Week 3–2 | Slide 26 (2)]
+Visualization of a flattened vector representation of an input image — converting pixel grids into 1-D arrays for training.
+
+[Week 3–2 | Slide 26 (3)]
+Repetition of digit 8 example passing through a multilayer network, highlighting information flow and feature extraction.
+
+[Week 3–2 | Slide 27]
+Conceptual visualization of activation maps or learned features, showing how networks detect patterns in image data.
+
+[Week 3–2 | Slide 28 (1)]
+Diagram of neural-network weight adjustments or backpropagation, with arrows indicating error signal flow.
+
+[Week 3–2 | Slide 28 (2)]
+Continuation graphic illustrating gradient updates across layers — demonstrates error minimization through repeated training epochs.
+
+[Week 3–2 | Slide 29]
+Summary chart connecting input images, neural-network processing, and predicted outputs.
+
+[Week 3–2 | Slide 29 (2)]
+Diagram of a single neuron (node) showing how inputs (x₁, x₂, x₃) are multiplied by weights (w₁, w₂, w₃), summed with bias b, and passed through an activation function f(z) to produce the output a.
+
+[Week 3–2 | Slide 30]
+Overview of common activation functions used in neural networks:
+	•	Sigmoid (σ(x)): smooth curve mapping input to (0, 1)
+	•	tanh(x): scaled between (−1, 1)
+	•	ReLU and Leaky ReLU: introduce nonlinearity by zeroing negative inputs
+	•	Maxout and ELU: advanced forms improving gradient flow.
+
+[Week 3–2 | Slide 31]
+Illustration of a feedforward neural network with multiple hidden layers and labeled inputs (a–d).
+Arrows show backpropagation, the process of adjusting weights to reduce prediction error through gradient descent.

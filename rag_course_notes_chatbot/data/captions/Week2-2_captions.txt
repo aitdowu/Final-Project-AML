@@ -1,0 +1,76 @@
+[Week 2–2 | Slide 1]
+Four-panel comic comparing statistics, machine learning, and artificial intelligence: statistics is reframed as machine learning, then presented to an audience as AI, humorously showing overlapping concepts.
+
+[Week 2–2 | Slide 8 (1)]
+Portrait of an unidentified man, representing a notable contributor to artificial intelligence or deep-learning research.
+
+[Week 2–2 | Slide 8 (2)]
+Portrait of an unidentified woman, shown as another key researcher or pioneer in AI and machine learning.
+
+[Week 2–2 | Slide 8 (3)]
+Portrait of an unidentified older man sitting at a desk with a keyboard, symbolizing an early computer-science researcher.
+
+[Week 2–2 | Slide 8 (4)]
+Bar chart from the ImageNet Large-Scale Visual Recognition Challenge (ILSVRC) showing error-rate decline from 2010 to 2017 as deep-learning models (AlexNet, VGG, ResNet, SENet) surpassed human accuracy.
+
+[Week 2–2 | Slide 8 (5)]
+Grid of handwritten digits from the MNIST dataset, each labeled with predicted and true values—used to demonstrate neural-network digit recognition.
+
+[Week 2–2 | Slide 10]
+Flow diagram of a machine-learning pipeline for real-estate investment: district data → district pricing → investment analysis → investments, showing feature flow through model components.
+
+[Week 2–2 | Slide 11 (1)]
+Equation for Root Mean Squared Error (RMSE): a regression-model evaluation metric measuring average squared prediction error.
+
+[Week 2–2 | Slide 11 (2)]
+Equation for Mean Absolute Error (MAE): evaluation metric using absolute prediction differences to measure model accuracy and robustness to outliers.
+
+[Week 2–2 | Slide 11 (3)]
+Black-and-white illustration of the Greek letter epsilon (ε) or a similar symbol, likely representing a variable in model-evaluation formulas.
+
+[Week 2–2 | Slide 11 (4)]
+Mathematical expression showing the partial derivative of a loss function with respect to a parameter, representing optimization in gradient descent.
+
+[Week 2–2 | Slide 11 (5)]
+Equation depicting gradient update rules, illustrating how weights adjust iteratively to minimize loss during training.
+
+[Week 2–2 | Slide 11 (6)]
+Formula representing weight updates using gradients and learning rate, core concept in stochastic gradient descent.
+
+[Week 2–2 | Slide 18]
+Three scatter plots showing data preprocessing steps: original data, zero-centered data, and normalized data, demonstrating scaling and centering effects.
+
+[Week 2–2 | Slide 20]
+Python code snippet defining an sklearn Pipeline that imputes missing numerical data using the median and standardizes features with StandardScaler.
+
+[Week 2–2 | Slide 22]
+Three-panel illustration comparing underfitting, good fit, and overfitting using line plots of model predictions versus data points.
+
+[Week 2–2 | Slide 23]
+Diagram of k-fold cross-validation: training data split into five folds with alternating validation and test sets for model evaluation.
+
+[Week 2–2 | Slide 26 (1)]
+News headline and photo depicting medical staff under the title “An Algorithm That Predicts Deadly Infections Is Often Flawed,” highlighting bias and accuracy issues in healthcare AI.
+
+[Week 2–2 | Slide 26 (2)]
+Logo image for “Epic,” referring to Epic Systems, developer of the widely used Epic Sepsis Model (ESM).
+
+[Week 2–2 | Slide 26 (3)]
+Screenshot of article text summarizing a 2021 study showing the Epic Sepsis Model’s reduced accuracy compared with doctors, detecting only 63 percent of sepsis cases versus the expected 77–83 percent.
+
+[Week 2–2 | Slide 29 (1)]
+Equations for the slope and intercept of a simple linear regression line:
+β₁ = Σ(xᵢ−x̄)(yᵢ−ȳ) / Σ(xᵢ−x̄)² and β₀ = ȳ − β₁x̄, describing how best-fit parameters are computed.
+
+[Week 2–2 | Slide 29 (2)]
+Formula defining sample means for regression: ȳ = (1/n)Σyᵢ and x̄ = (1/n)Σxᵢ, representing average values used to calculate regression parameters.
+
+[Week 2–2 | Slide 30 (1)]
+Equation for residual standard error (RSE), showing RSE = √(1/(n−2) Σ(yᵢ−ŷᵢ)²), a measure of model prediction variability.
+
+[Week 2–2 | Slide 30 (2)]
+Formula for residual sum of squares (RSS): RSS = Σ(yᵢ−ŷᵢ)², representing total squared prediction error between observed and fitted values.
+
+[Week 2–2 | Slide 33]
+Green diagram showing steps of gradient descent training:
+	1.	Calculate loss → 2. Determine direction for weight updates → 3. Adjust weights to reduce loss → 4. Repeat until convergence.

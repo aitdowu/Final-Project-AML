@@ -1,0 +1,56 @@
+[Week 1–2 | Slide 1]
+Meme comparing public fears about AI with a neural network mislabeling a cat as “dog,” humorously illustrating early-stage model inaccuracy.
+
+[Week 1–2 | Slide 11]
+Concentric-circle diagram showing hierarchy from Artificial Intelligence to Machine Learning, Deep Learning, and Generative AI.
+
+[Week 1–2 | Slide 13]
+Flowchart of the traditional rule-based programming process: study problem → write rules → evaluate → analyze errors → loop.
+
+[Week 1–2 | Slide 14]
+Diagram of automated machine-learning workflow: train model → evaluate → launch → update data → retrain, forming a continuous feedback loop.
+
+[Week 1–2 | Slide 18]
+Infographic showing three main types of machine learning—supervised, unsupervised, reinforcement—branching into classification, regression, clustering, and agent feedback loops.
+
+[Week 1–2 | Slide 22]
+Simplified visual showing input data (apple and watermelon icons) processed by a model that outputs sorted categories, demonstrating basic supervised classification.
+
+[Week 1–2 | Slide 23]
+Hand-written illustration labeled “clustering,” representing unsupervised grouping of data points.
+
+[Week 1–2 | Slide 24 (1)]
+Sketch with a blue arrow pointing toward a pink circle, representing movement or transformation between data clusters.
+
+[Week 1–2 | Slide 24 (2)]
+Duplicate or variant diagram of supervised, unsupervised, and reinforcement learning types, emphasizing labeled vs unlabeled data and feedback mechanisms.
+
+[Week 1–2 | Slide 26]
+Repeat of the machine-learning taxonomy figure, reinforcing relationships among classification, regression, clustering, and reinforcement learning.
+
+[Week 1–2 | Slide 27]
+Illustration of a reinforcement learning process showing a rat in a maze taking actions, receiving rewards, and updating its internal state based on observation—demonstrates the agent–environment feedback loop.
+
+[Week 1–2 | Slide 28]
+Line chart comparing a simple linear model (blue line) and a nonlinear curve fit (red line) across f(x) values, showing model bias and flexibility differences.
+
+[Week 1–2 | Slide 29]
+Mathematical equation y = β₀ + β₁x representing a simple linear regression model with intercept β₀ and slope β₁.
+
+[Week 1–2 | Slide 30]
+Scatterplot of x vs. y values showing a roughly linear trend in blue points, illustrating data suitable for linear regression.
+
+[Week 1–2 | Slide 31]
+Equation y = mx + b depicting the general form of a straight-line equation used in regression modeling.
+
+[Week 1–2 | Slide 32]
+Formula RSS = Σ (yᵢ – ŷᵢ)² showing the residual sum of squares, a measure of total prediction error in regression analysis.
+
+[Week 1–2 | Slide 33]
+Scatterplot with blue data points and a red “Linear Fit” line, demonstrating the fitted regression line minimizing squared residuals.
+
+[Week 1–2 | Slide 34 (1)]
+Root Mean Squared Error (RMSE) formula visualizing model evaluation metric derived from squared residuals averaged and square-rooted.
+
+[Week 1–2 | Slide 34 (2)]
+Scatterplot of regression results showing blue training data, red fitted line, and green “new points” indicating predictions for unseen data.

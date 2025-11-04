@@ -1,0 +1,53 @@
+[Week 5 | Slide 1]
+Meme of Pikachu looking shocked captioned “model: overfits on training data / world: new data / model:”, humorously representing how models fail to generalize when overfit to training data.
+
+[Week 5 | Slide 5]
+Circular blue diagram labeled “Choose architecture (model, data, etc.) → Train model → Diagnostics (bias, variance, and error analysis)”, showing the iterative ML development cycle.
+
+[Week 5 | Slide 6]
+Three examples of neural network architectures with different numbers of layers and units — demonstrating variations in model complexity for the same input/output setup.
+
+[Week 5 | Slide 9]
+Bar diagram illustrating a 5-fold cross-validation scheme where one fold is used as validation and the rest as training data, rotating across folds to evaluate performance comprehensively.
+
+[Week 5 | Slide 11]
+Set of regression error formulas:
+– MAE = (1/N) Σ |yᵢ – ŷᵢ|
+– MSE = (1/N) Σ (yᵢ – ŷᵢ)²
+– RMSE = √MSE
+– R² = 1 – Σ(yᵢ – ŷᵢ)² / Σ(yᵢ – ȳ)²
+Defines common metrics for model performance evaluation.
+
+[Week 5 | Slide 12]
+2×2 confusion matrix labeling True/False Positives and True/False Negatives, used to evaluate binary classification outcomes.
+
+[Week 5 | Slide 13]
+Expanded confusion matrix chart showing detailed metrics (TPR, FPR, FNR, PPV, FDR, FOR, NPV, MCC, Accuracy, F₁, Balanced Accuracy, etc.) with formulas and interpretations.
+
+[Week 5 | Slide 16]
+Equation for accuracy:
+Accuracy = (TP + TN)/(TP + TN + FP + FN) = (3 + 2)/(3 + 2 + 1 + 1) ≈ 0.714, showing how classification performance is computed.
+
+[Week 5 | Slide 17 (1)]
+Formula for the F₁ score = 2 / (recall⁻¹ + precision⁻¹) = 2 · (precision · recall)/(precision + recall), balancing precision and recall.
+
+[Week 5 | Slide 17 (2)]
+Venn-style diagram illustrating relationships among true/false positives and true/false negatives with graphical representations of precision and recall.
+
+[Week 5 | Slide 17 (1)]
+Formula showing True Positive Rate (Recall), defined as TPR = \frac{TP}{TP + FN}, measuring how many actual positives are correctly identified by the model.
+
+[Week 5 | Slide 17 (2)]
+Formula showing Positive Predictive Value (Precision), defined as PPV = \frac{TP}{TP + FP}, indicating how many predicted positives are actually correct.
+
+[Week 5 | Slide 17 (3)]
+ROC curve diagram plotting True Positive Rate (TP Rate) against False Positive Rate (FP Rate) for different decision thresholds, showing how model performance varies with threshold choice.
+
+[Week 5 | Slide 18 (1)]
+AUC-ROC visualization — left plot shows predictor score distributions for true and false classes; right plot shows the ROC curve with area under curve (AUC = 0.853) as an overall performance metric.
+
+[Week 5 | Slide 20]
+Animated 2D convolution operation illustration showing how a kernel slides over an image grid to extract spatial features layer-by-layer.
+
+[Week 5 | Slide 22]
+Diagram of an LSTM (Long Short-Term Memory) cell, labeling the forget, input, and output gates, as well as cell state updates. Demonstrates how recurrent neural networks manage long-term dependencies during training.

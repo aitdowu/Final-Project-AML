@@ -1,0 +1,14 @@
+{
+  "total_pdfs": 6,
+  "total_chunks": 80,
+  "embedding_model": "all-MiniLM-L6-v2",
+  "embedding_dimension": 384,
+  "pdf_files": [
+    "data/Week3-2.pdf",
+    "data/Week1-2.pdf",
+    "data/Week2-2.pdf",
+    "data/Week4-2.pdf",
+    "data/Week7.pdf",
+    "data/Week5.pdf"
+  ]
+}

@@ -1,0 +1,38 @@
+[Week 7 | Slide 3]
+Graph showing the bias–variance tradeoff, where bias decreases and variance increases with model complexity, illustrating the optimal balance point that minimizes total error.
+
+[Week 7 | Slide 4 (1)]
+Logical expression representing a decision rule: (Outlook = Sunny ∧ Humidity = Normal).
+
+[Week 7 | Slide 4 (2)]
+Logical expression representing a decision rule: (Outlook = Rain ∧ Wind = Weak).
+
+[Week 7 | Slide 5 (1)]
+Silhouette image of a cloud — an example of a simple input feature in a classification context.
+
+[Week 7 | Slide 5 (2)]
+Two illustrated animal icons (cat and dog) representing labeled training examples in a classification dataset.
+
+[Week 7 | Slide 5 (3)]
+Gray animal icon representing an unlabeled or test example to be classified.
+
+[Week 7 | Slide 5 (4)]
+Two illustrated cat icons, showing examples from the same class to highlight intra-class variation.
+
+[Week 7 | Slide 6]
+Diagram of a simple classification pipeline illustrating the use of labeled examples to distinguish between different categories.
+
+[Week 7 | Slide 8 (1)]
+Schematic diagram introducing decision tree splits, showing how features are partitioned recursively based on attribute conditions.
+
+[Week 7 | Slide 8 (2)]
+Visual example of a decision tree branch, showing how feature-based rules lead to class predictions through hierarchical splitting.
+
+[Week 7 | Slide 20]
+Formula for calculating Information Gain in decision trees, which measures how much a feature split improves classification by reducing entropy.
+
+[Week 7 | Slide 21]
+Definitions of each variable used in the Information Gain formula, explaining entropy values for parent and child nodes and how sample counts weight their contribution.
+
+[Week 7 | Slide 22]
+Equation for binary entropy, showing how uncertainty is measured based on class probabilities in a dataset before and after splitting.
