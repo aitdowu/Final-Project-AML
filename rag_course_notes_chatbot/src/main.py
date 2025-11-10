@@ -1,13 +1,3 @@
-"""
-Main Chat Interface for RAG Course Notes Chatbot
-
-This script provides a Gradio-based chat interface for the RAG chatbot.
-Users can ask questions about course materials, and the system will retrieve
-relevant chunks and generate answers using open-source LLMs.
-
-Author: RAG Course Notes Chatbot Project
-"""
-
 import os
 
 # Set HuggingFace cache directory BEFORE importing transformers

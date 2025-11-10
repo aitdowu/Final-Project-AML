@@ -1,13 +1,3 @@
-"""
-PDF Ingestion Script for RAG Course Notes Chatbot
-
-This script processes PDF files from the data/ directory, extracts text using both
-PyPDF2 and OCR (via pdf2image + pytesseract), chunks the text, computes embeddings,
-and stores them in a FAISS vector database.
-
-Author: RAG Course Notes Chatbot Project
-"""
-
 import os
 
 # Set HuggingFace cache directory to local project directory
