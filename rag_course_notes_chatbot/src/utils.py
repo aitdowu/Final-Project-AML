@@ -18,6 +18,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.metrics import precision_score, recall_score, f1_score
 import json
 import pickle
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -44,34 +46,262 @@ def load_vector_store(db_path: str) -> Optional[Any]:
         return None
 
 
-def generate_answer_with_llm(query: str, relevant_chunks: List[Dict[str, Any]], llm_model: str) -> str:
+class QwenLLM:
+    """Qwen2-1.5B-Instruct LLM wrapper for answer generation."""
+    
+    def __init__(self, model_name: str = "Qwen/Qwen2-1.5B-Instruct", use_quantization: bool = True):
+        """
+        Initialize Qwen2 LLM.
+        
+        Args:
+            model_name: HuggingFace model identifier
+            use_quantization: Whether to use 8-bit quantization for CPU (reduces memory usage)
+        """
+        self.model_name = model_name
+        self.device = self._get_device()
+        self.use_quantization = use_quantization and self.device == "cpu"
+        
+        # Get HuggingFace token from environment (usually not needed for Qwen2, but just in case)
+        hf_token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGINGFACE_TOKEN")
+        
+        logger.info(f"Loading Qwen2 model: {model_name} on device: {self.device}")
+        if self.use_quantization:
+            logger.info("Using 8-bit quantization for reduced memory usage")
+        
+        try:
+            # Load tokenizer
+            self.tokenizer = AutoTokenizer.from_pretrained(
+                model_name,
+                trust_remote_code=True,
+                token=hf_token if hf_token else None
+            )
+            
+            # Set pad token if not set
+            if self.tokenizer.pad_token is None:
+                self.tokenizer.pad_token = self.tokenizer.eos_token
+            
+            # Load model with appropriate settings
+            model_kwargs = {
+                "trust_remote_code": True,
+                "token": hf_token if hf_token else None
+            }
+            
+            if self.device == "cuda":
+                # CUDA: Use float16 for faster inference
+                self.model = AutoModelForCausalLM.from_pretrained(
+                    model_name,
+                    torch_dtype=torch.float16,
+                    device_map="auto",
+                    **model_kwargs
+                )
+            elif self.device == "mps":
+                # MPS (Apple Silicon): Use float32
+                self.model = AutoModelForCausalLM.from_pretrained(
+                    model_name,
+                    torch_dtype=torch.float32,
+                    **model_kwargs
+                )
+                self.model = self.model.to(self.device)
+            else:
+                # CPU: Use quantization if available, otherwise float32
+                # Note: bitsandbytes doesn't work on macOS/ARM, so it will fall back gracefully
+                if self.use_quantization:
+                    try:
+                        # Try to use 8-bit quantization to reduce memory usage
+                        # This requires bitsandbytes which only works on Linux/Windows with CUDA
+                        try:
+                            from transformers import BitsAndBytesConfig
+                            quantization_config = BitsAndBytesConfig(load_in_8bit=True)
+                            self.model = AutoModelForCausalLM.from_pretrained(
+                                model_name,
+                                quantization_config=quantization_config,
+                                low_cpu_mem_usage=True,
+                                **model_kwargs
+                            )
+                            logger.info("Loaded model with 8-bit quantization")
+                        except (ImportError, ValueError, RuntimeError) as e:
+                            # bitsandbytes not available or not supported (e.g., on macOS)
+                            logger.info(f"Quantization not available ({e}), using float32 instead")
+                            self.use_quantization = False
+                            self.model = AutoModelForCausalLM.from_pretrained(
+                                model_name,
+                                torch_dtype=torch.float32,
+                                low_cpu_mem_usage=True,
+                                **model_kwargs
+                            )
+                            self.model = self.model.to(self.device)
+                    except Exception as e:
+                        logger.warning(f"Quantization failed: {e}, falling back to float32")
+                        self.use_quantization = False
+                        self.model = AutoModelForCausalLM.from_pretrained(
+                            model_name,
+                            torch_dtype=torch.float32,
+                            low_cpu_mem_usage=True,
+                            **model_kwargs
+                        )
+                        self.model = self.model.to(self.device)
+                else:
+                    # No quantization, use float32
+                    self.model = AutoModelForCausalLM.from_pretrained(
+                        model_name,
+                        torch_dtype=torch.float32,
+                        low_cpu_mem_usage=True,
+                        **model_kwargs
+                    )
+                    self.model = self.model.to(self.device)
+            
+            # Set model to evaluation mode
+            self.model.eval()
+            logger.info("Qwen2 model loaded successfully")
+            
+        except Exception as e:
+            error_msg = str(e).lower()
+            if "token" in error_msg or "authentication" in error_msg:
+                logger.error(f"Authentication error loading Qwen2 model: {e}")
+                logger.error("Qwen2 model may require a HuggingFace access token.")
+                logger.error("Set it as an environment variable:")
+                logger.error("  export HF_TOKEN=your_token_here")
+                logger.error("Get your token from: https://huggingface.co/settings/tokens")
+            else:
+                logger.error(f"Error loading Qwen2 model: {e}")
+            raise
+    
+    def _get_device(self) -> str:
+        """Determine the best device to use."""
+        if torch.cuda.is_available():
+            return "cuda"
+        elif hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+            return "mps"
+        else:
+            return "cpu"
+    
+    def generate(self, prompt: str, max_new_tokens: int = 512, temperature: float = 0.7, top_p: float = 0.9) -> str:
+        """
+        Generate text from a prompt.
+        
+        Args:
+            prompt: Input prompt (can be a string or formatted chat messages)
+            max_new_tokens: Maximum tokens to generate
+            temperature: Sampling temperature
+            top_p: Nucleus sampling parameter
+            
+        Returns:
+            Generated text
+        """
+        try:
+            # Tokenize input
+            inputs = self.tokenizer(prompt, return_tensors="pt")
+            
+            # Move to device only if not using quantization (quantized models handle this automatically)
+            if not self.use_quantization:
+                inputs = {k: v.to(self.device) for k, v in inputs.items()}
+            
+            # Generate
+            with torch.no_grad():
+                generate_kwargs = {
+                    **inputs,
+                    "max_new_tokens": max_new_tokens,
+                    "temperature": temperature,
+                    "top_p": top_p,
+                    "do_sample": temperature > 0,
+                    "pad_token_id": self.tokenizer.pad_token_id or self.tokenizer.eos_token_id,
+                }
+                
+                outputs = self.model.generate(**generate_kwargs)
+            
+            # Decode output (only the newly generated tokens)
+            # Get the length of input tokens to extract only new tokens
+            input_length = inputs['input_ids'].shape[1]
+            generated_tokens = outputs[0][input_length:]
+            generated_text = self.tokenizer.decode(generated_tokens, skip_special_tokens=True)
+            
+            return generated_text.strip()
+            
+        except Exception as e:
+            logger.error(f"Error generating text: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
+            return f"Error generating response: {str(e)}"
+
+
+def generate_answer_with_llm(query: str, relevant_chunks: List[Dict[str, Any]], llm_model: Any) -> str:
     """
     Generate answer using LLM with retrieved context.
     
     Args:
         query: User query
         relevant_chunks: Retrieved document chunks
-        llm_model: LLM model identifier
+        llm_model: QwenLLM instance or placeholder string
         
     Returns:
         Generated answer
     """
-    # TODO: Implement actual open-source LLM integration
-    # This is a placeholder implementation
-    
-    # Combine context from relevant chunks
-    context = "\n\n".join([chunk['text'] for chunk in relevant_chunks])
-    
-    # Simple template-based response (placeholder)
-    answer = f"""Based on the course materials, here's what I found:
+    # Check if we have an actual LLM model
+    if llm_model == "placeholder_llm" or llm_model is None:
+        # Fallback to placeholder if model not loaded
+        context = "\n\n".join([chunk['text'] for chunk in relevant_chunks])
+        return f"""Based on the course materials, here's what I found:
 
 {context[:500]}...
 
-[Note: This is a placeholder response. In the full implementation, this would use an open-source LLM like Llama 2, Mistral, or similar to generate a proper answer based on the retrieved context.]
-
-The information above comes from {len(relevant_chunks)} relevant sections of your course materials."""
+[Note: LLM model not loaded. This is a placeholder response.]"""
     
-    return answer
+    # Combine context from relevant chunks
+    context_parts = []
+    for i, chunk in enumerate(relevant_chunks, 1):
+        context_parts.append(f"[Context {i} from {chunk['source']}]:\n{chunk['text']}")
+    
+    context = "\n\n".join(context_parts)
+    
+    # Create RAG prompt for Qwen2
+    system_message = "You are a helpful assistant that answers questions about course materials using the provided context. Provide clear and accurate answers based only on the context. If the context doesn't contain enough information, say so."
+    user_message = f"""Context from course materials:
+{context}
+
+Question: {query}"""
+    
+    # Use Qwen2's chat template
+    try:
+        if hasattr(llm_model.tokenizer, 'apply_chat_template') and llm_model.tokenizer.chat_template is not None:
+            # Qwen2 uses a specific chat format
+            messages = [
+                {"role": "system", "content": system_message},
+                {"role": "user", "content": user_message}
+            ]
+            prompt = llm_model.tokenizer.apply_chat_template(
+                messages, 
+                tokenize=False, 
+                add_generation_prompt=True
+            )
+        else:
+            # Fallback format for Qwen2 (though it should have a chat template)
+            prompt = f"""<|im_start|>system
+{system_message}<|im_end|>
+<|im_start|>user
+{user_message}<|im_end|>
+<|im_start|>assistant
+"""
+    except Exception as e:
+        logger.warning(f"Error applying chat template: {e}, using fallback format")
+        # Qwen2 fallback format
+        prompt = f"""<|im_start|>system
+{system_message}<|im_end|>
+<|im_start|>user
+{user_message}<|im_end|>
+<|im_start|>assistant
+"""
+    
+    try:
+        # Generate answer with slightly lower temperature for more focused responses
+        answer = llm_model.generate(prompt, max_new_tokens=512, temperature=0.6, top_p=0.9)
+        return answer.strip()
+    except Exception as e:
+        logger.error(f"Error generating answer with LLM: {e}")
+        import traceback
+        logger.error(traceback.format_exc())
+        # Fallback to simple context return
+        context = "\n\n".join([chunk['text'] for chunk in relevant_chunks])
+        return f"Error generating answer: {str(e)}\n\nRelevant context found:\n{context[:1000]}"
 
 
 def format_sources(relevant_chunks: List[Dict[str, Any]]) -> str:
@@ -180,8 +410,8 @@ def evaluate_retrieval_performance(queries: List[str], ground_truth: List[List[s
     }
     
     for query, gt_docs in zip(queries, ground_truth):
-        # Generate query embedding
-        query_embedding = embedding_generator.generate_embeddings([query])[0]
+        # Generate query embedding (with is_query=True for Snowflake model)
+        query_embedding = embedding_generator.generate_embeddings([query], is_query=True)[0]
         
         # Search vector store
         results = vector_store.search(query_embedding, k=10)
@@ -391,8 +621,7 @@ Mean Similarity: {metrics.get('mean_similarity', 0):.3f}
 
 Model Information:
 -----------------
-Embedding Model: all-MiniLM-L6-v2
-Embedding Dimension: 384
+Embedding Model: Snowflake/snowflake-arctic-embed-m-v2.0
 Chunk Size: 800 characters
 Chunk Overlap: 100 characters
 

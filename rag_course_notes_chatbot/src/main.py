@@ -9,6 +9,20 @@ Author: RAG Course Notes Chatbot Project
 """
 
 import os
+
+# Set HuggingFace cache directory BEFORE importing transformers
+# This must be done before any transformers/sentence_transformers imports
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(script_dir)
+local_cache = os.path.join(project_root, ".cache", "huggingface")
+os.makedirs(local_cache, exist_ok=True)
+
+# Set environment variables to use local cache
+os.environ["HF_HOME"] = local_cache
+os.environ["SENTENCE_TRANSFORMERS_HOME"] = local_cache
+# Disable tokenizers parallelism warning when forking processes
+os.environ["TOKENIZERS_PARALLELISM"] = "false"
+
 import logging
 import gradio as gr
 from typing import List, Dict, Any, Tuple
@@ -16,23 +30,38 @@ import json
 
 # Import our custom modules
 from ingest import VectorStore, EmbeddingGenerator
-from utils import load_vector_store, generate_answer_with_llm, format_sources
+from utils import load_vector_store, generate_answer_with_llm, format_sources, QwenLLM
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Set HuggingFace token if available (for Qwen2 model access)
+# Note: Qwen2 models are usually publicly available, but token may be needed for some models
+# Token should be set via environment variable: export HF_TOKEN=your_token_here
+hf_token = os.environ.get("HF_TOKEN") or os.environ.get("HUGGINGFACE_TOKEN")
+if hf_token:
+    logger.info("Using HuggingFace token from environment")
+else:
+    logger.info("No HuggingFace token found - using public model access (should work for Qwen2)")
+
 
 class RAGChatbot:
     """Main RAG chatbot class that handles queries and responses."""
     
-    def __init__(self, db_path: str = "db/vector_store"):
+    def __init__(self, db_path: str = None):
         """
         Initialize the RAG chatbot.
         
         Args:
-            db_path: Path to the vector database
+            db_path: Path to the vector database (if None, uses project root)
         """
+        # Get project root directory
+        if db_path is None:
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            project_root = os.path.dirname(script_dir)
+            db_path = os.path.join(project_root, "db", "vector_store")
+        
         self.db_path = db_path
         self.vector_store = None
         self.embedding_generator = None
@@ -42,21 +71,38 @@ class RAGChatbot:
         self._load_components()
     
     def _load_components(self):
-        """Load the vector store and embedding model."""
+        """Load the vector store, embedding model, and LLM."""
         try:
+            # Load embedding generator first to get dimension
+            self.embedding_generator = EmbeddingGenerator()
+            expected_dim = self.embedding_generator.get_dimension()
+            logger.info("Embedding generator loaded successfully")
+            
             # Load vector store
             self.vector_store = VectorStore()
             self.vector_store.load(self.db_path)
             logger.info("Vector store loaded successfully")
             
-            # Load embedding generator
-            self.embedding_generator = EmbeddingGenerator()
-            logger.info("Embedding generator loaded successfully")
+            # Check if dimensions match
+            if self.vector_store.dimension != expected_dim:
+                logger.warning(
+                    f"Dimension mismatch! Database has {self.vector_store.dimension} dimensions, "
+                    f"but model produces {expected_dim} dimensions. "
+                    f"Please regenerate the database with: rm -rf db/ && python3 src/ingest.py"
+                )
+                raise ValueError(
+                    f"Embedding dimension mismatch. Database: {self.vector_store.dimension}, "
+                    f"Model: {expected_dim}. Regenerate database with new model."
+                )
             
-            # TODO: Initialize open-source LLM for generation
-            # Current placeholder - will be replaced with actual model
-            self.llm_model = "placeholder_llm"
-            logger.info("LLM model placeholder initialized")
+            # Initialize Qwen2 LLM
+            try:
+                self.llm_model = QwenLLM()
+                logger.info("Qwen2 LLM loaded successfully")
+            except Exception as e:
+                logger.warning(f"Failed to load Qwen2 LLM: {e}")
+                logger.warning("Falling back to placeholder mode")
+                self.llm_model = "placeholder_llm"
             
         except Exception as e:
             logger.error(f"Error loading components: {e}")
@@ -74,8 +120,8 @@ class RAGChatbot:
             List of relevant chunks with metadata
         """
         try:
-            # Generate query embedding
-            query_embedding = self.embedding_generator.generate_embeddings([query])[0]
+            # Generate query embedding (with is_query=True to add "query: " prefix for Snowflake model)
+            query_embedding = self.embedding_generator.generate_embeddings([query], is_query=True)[0]
             
             # Search vector store
             results = self.vector_store.search(query_embedding, k=k)
@@ -104,7 +150,6 @@ class RAGChatbot:
                 return "I couldn't find any relevant information in the course materials for your question.", ""
             
             # Generate answer using LLM
-            # TODO: Replace with actual open-source LLM implementation
             answer = generate_answer_with_llm(query, relevant_chunks, self.llm_model)
             
             # Format sources
@@ -164,19 +209,19 @@ def create_chat_interface():
         return response, sources
     
     # Create Gradio interface
-    with gr.Blocks(css=css, title="RAG Course Notes Chatbot") as interface:
+    with gr.Blocks(css=css, title="AML Notes RAG Chatbot") as interface:
         gr.Markdown(
             """
-            # 📚 RAG Course Notes Chatbot
+            # AML Notes RAG Chatbot
             
-            Ask questions about your course materials! This chatbot uses Retrieval-Augmented Generation (RAG) 
-            to find relevant information from your uploaded PDFs and generate helpful answers.
+            Ask questions about Applied Machine Learning course materials. This chatbot uses Retrieval-Augmented Generation (RAG) 
+            to find relevant information from course PDFs and generate answers.
             
             **How it works:**
-            1. Upload your course PDFs to the `data/` directory
-            2. Run `python src/ingest.py` to process the documents
-            3. Ask questions about the course content
-            4. Get answers with source citations
+            1. PDFs are processed and embedded into a vector database
+            2. Questions are matched against course content using semantic search
+            3. Relevant chunks are retrieved and used to generate answers
+            4. Sources are cited for verification
             """
         )
         
@@ -193,8 +238,8 @@ def create_chat_interface():
                 
                 with gr.Row():
                     msg_input = gr.Textbox(
-                        placeholder="Ask a question about your course materials...",
-                        label="Your Question",
+                        placeholder="Ask a question about Applied Machine Learning...",
+                        label="Question",
                         lines=2,
                         scale=4
                     )
@@ -211,16 +256,17 @@ def create_chat_interface():
             with gr.Column(scale=1):
                 gr.Markdown(
                     """
-                    ### 💡 Tips for Better Results
+                    ### Tips for Better Results
                     
                     - Ask specific questions about concepts, formulas, or topics
-                    - Use keywords from your course materials
+                    - Use keywords from the course materials
                     - Try rephrasing if you don't get good results
                     - Check the sources to verify information
                     
-                    ### 🔧 Technical Details
+                    ### Technical Details
                     
-                    - **Embedding Model**: all-MiniLM-L6-v2
+                    - **Embedding Model**: Snowflake Arctic Embed M v2.0
+                    - **LLM Model**: Qwen2-1.5B-Instruct
                     - **Vector Store**: FAISS
                     - **Chunk Size**: 800 characters
                     - **Retrieval**: Top-5 most similar chunks
@@ -272,10 +318,15 @@ def create_chat_interface():
 def main():
     """Main function to launch the chat interface."""
     
+    # Get project root directory
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
+    db_path = os.path.join(project_root, "db", "vector_store")
+    
     # Check if vector database exists
-    db_path = "db/vector_store"
     if not os.path.exists(f"{db_path}.index"):
         logger.error("Vector database not found!")
+        logger.info(f"Expected database at: {db_path}.index")
         logger.info("Please run 'python src/ingest.py' first to process your PDF files.")
         return
     
@@ -289,10 +340,26 @@ def main():
     logger.info("Starting RAG Course Notes Chatbot...")
     logger.info("Open your browser and navigate to the URL shown below")
     
+    # Try to find an available port
+    import socket
+    def find_free_port(start_port=7860):
+        for port in range(start_port, start_port + 10):
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                try:
+                    s.bind(('localhost', port))
+                    return port
+                except OSError:
+                    continue
+        return start_port  # Fallback
+    
+    port = find_free_port(7860)
+    if port != 7860:
+        logger.info(f"Port 7860 in use, using port {port} instead")
+    
     # Launch the interface
     interface.launch(
         server_name="0.0.0.0",
-        server_port=7860,
+        server_port=port,
         share=False,
         show_error=True,
         quiet=False
