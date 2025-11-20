@@ -1,0 +1,31 @@
+
+RAG Course Notes Chatbot - Evaluation Report
+============================================
+
+Retrieval Performance Metrics:
+-----------------------------
+Precision@5:  0.240
+Recall@5:     0.240
+Precision@10: 0.120
+Recall@10:    0.240
+Mean Similarity: 0.418
+
+Model Information:
+-----------------
+Embedding Model: Snowflake/snowflake-arctic-embed-m-v2.0
+Chunk Size: 800 characters
+Chunk Overlap: 100 characters
+
+Evaluation Notes:
+----------------
+- Precision@K measures the fraction of retrieved documents that are relevant
+- Recall@K measures the fraction of relevant documents that are retrieved
+- Similarity scores are based on cosine similarity in embedding space
+- Ground truth relevance is approximated using similarity thresholds
+
+Recommendations:
+---------------
+- Consider fine-tuning embedding model on domain-specific data
+- Experiment with different chunk sizes and overlap strategies
+- Implement more sophisticated relevance scoring
+- Add user feedback mechanism for continuous improvement

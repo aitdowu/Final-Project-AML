@@ -1,0 +1,12 @@
+Metric,Value,Description
+Precision@5,0.240,Fraction of top-5 retrieved docs that are relevant
+Recall@5,0.240,Fraction of relevant docs found in top-5 results
+F1-Score@5,0.240,Harmonic mean of precision and recall at k=5
+Precision@10,0.120,Fraction of top-10 retrieved docs that are relevant
+Recall@10,0.240,Fraction of relevant docs found in top-10 results
+F1-Score@10,0.160,Harmonic mean of precision and recall at k=10
+Mean Similarity Score,0.418,Average cosine similarity score across all queries
+Total Test Queries,10,Number of test queries evaluated
+Average Relevant Docs per Query,5.0,Average number of relevant documents per query
+Embedding Model,Snowflake/snowflake-arctic-embed-m-v2.0,Sentence transformer model used for embeddings
+Vector Database Size,156,Total number of document chunks in vector store
