@@ -1,0 +1,14 @@
+[Week 7 | Slide 14 (1)]
+High-level diagram of bagging with multiple decision trees trained on different bootstrapped samples and combined through majority voting or averaging.
+
+[Week 7 | Slide 14 (2)]
+Example of bootstrapped datasets and the individual decision trees trained on different feature subsets, illustrating how random forest trees diversify.
+
+[Week 7 | Slide 15]
+Formula showing the common heuristic for the number of features to sample at each split in a random forest, where k equals the square root of the total feature count.
+
+[Week 7 | Slide 16]
+Comparison between bagging and boosting, showing how bagging trains models in parallel while boosting trains models sequentially with each model correcting the previous one.
+
+[Week 7 | Slide 5]
+Visualization of bagging workflow where the dataset is repeatedly resampled, multiple classifiers are trained, and their outputs are aggregated into a final ensemble prediction.

@@ -4,12 +4,9 @@ from tqdm import tqdm
 
 # List your PDF filenames here
 pdf_files = [
-    "/Users/tanki/Final Project AML/rag_course_notes_chatbot/data/Week1-2.pdf",
-    "/Users/tanki/Final Project AML/rag_course_notes_chatbot/data/Week2-2.pdf",
-    "/Users/tanki/Final Project AML/rag_course_notes_chatbot/data/Week3-2.pdf",
-    "/Users/tanki/Final Project AML/rag_course_notes_chatbot/data/Week4-2.pdf",
-    "/Users/tanki/Final Project AML/rag_course_notes_chatbot/data/Week5.pdf",
-    "/Users/tanki/Final Project AML/rag_course_notes_chatbot/data/Week7.pdf"  # this will actually be your Week6 file
+    "/Users/tanki/Final Project AML/rag_course_notes_chatbot/data/Week7(1)-2.pdf",
+    "/Users/tanki/Final Project AML/rag_course_notes_chatbot/data/Week8-2.pdf", 
+    "/Users/tanki/Final Project AML/rag_course_notes_chatbot/data/Week9.pdf",
 ]
 
 # Output folder for extracted images

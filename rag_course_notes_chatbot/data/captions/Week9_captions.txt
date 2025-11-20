@@ -1,0 +1,29 @@
+[Week 9 | Slide 5]
+Scatterplot showing two classes with multiple possible separating hyperplanes, illustrating that many linear boundaries can separate the data before an optimal one is chosen.
+
+[Week 9 | Slide 6]
+Left panel: dataset with two classes and an overlaid linear SVM decision boundary shaded by predicted class regions. Right panel: SVM margin visualized with support vectors and the separating hyperplane.
+
+[Week 9 | Slide 7]
+Comparison of unscaled and scaled features showing how SVM decision boundaries and margins dramatically shift when feature magnitudes differ.
+
+[Week 9 | Slide 11]
+Illustration of hard–margin sensitivity to outliers. Left: linear separation becomes impossible due to a single outlier. Right: soft–margin SVM handles the outlier by allowing margin violations.
+
+[Week 9 | Slide 12]
+Effect of the C hyperparameter on margin width. Left (C = 100): narrow margin with fewer violations. Right (C = 1): wider margin with more tolerated violations.
+
+[Week 9 | Slide 15]
+Left: nonlinear decision boundary required for separability. Right: linear SVM performs poorly because it forces a straight boundary through nonlinear structure.
+
+[Week 9 | Slide 16]
+Example of adding a second feature to make a dataset linearly separable. Left: 1D data cannot be separated. Right: in 2D space, a linear boundary becomes possible.
+
+[Week 9 | Slide 18]
+Git commands overview showing essential workflows: cloning, pulling, staging changes, committing, and pushing updates to GitHub.
+
+[Week 9 | Slide 19]
+Commands for creating and switching to a new feature branch, then pushing it to the remote repository with upstream tracking.
+
+[Week 9 | Slide 20]
+Example GitHub Actions CI workflow defining steps for installing dependencies, running tests with pytest, and linting code using ruff.
