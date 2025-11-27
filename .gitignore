@@ -1,0 +1,8 @@
+# Generated files
+.cache/
+__pycache__/
+
+# Hugging Face cache
+.cache/
+# Python bytecode
+__pycache__/
