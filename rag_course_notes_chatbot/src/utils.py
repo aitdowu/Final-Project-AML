@@ -1,12 +1,3 @@
-"""
-Utility Functions for RAG Course Notes Chatbot
-
-This module contains helper functions for OCR extraction, caption merging,
-embedding & retrieval utilities, metric calculations, and evaluation plotting.
-
-Author: RAG Course Notes Chatbot Project
-"""
-
 import os
 import logging
 import numpy as np
