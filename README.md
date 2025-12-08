@@ -18,17 +18,6 @@ The notes cover stuff like:
 - Optimization
 - Other AML topics
 
-## Setup
-
-First install some stuff. You need tesseract and poppler for OCR (optional but helpful):
-
-```bash
-# macOS
-brew install tesseract poppler
-
-# Linux
-sudo apt-get install tesseract-ocr poppler-utils
-```
 
 Then install Python packages:
 
@@ -62,7 +51,7 @@ export SENTENCE_TRANSFORMERS_HOME="$HF_HOME"
 PYTHONPATH=. python3 Pipeline/rag_chatbot.py
 ```
 
-First run downloads Qwen2-1.5B-Instruct. After it starts, open the URL it prints in your browser (usually http://127.0.0.1:7860).
+First run downloads Qwen2-1.5B-Instruct. After it starts, open the URL it prints in your browser.
 
 ### Reset database
 
@@ -123,7 +112,7 @@ Pretty straightforward:
 - Chunk size: 800 chars, 100 overlap
 - Interface: Gradio (super easy to use)
 
-Everything runs locally, no API keys needed. Qwen2 works on CPU but GPU is faster if you have one.
+Everything runs locally.
 
 ## Project structure
 
